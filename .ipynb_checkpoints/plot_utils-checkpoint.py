@@ -70,21 +70,19 @@ def plot_policy(policy):
     plt.show()
 
 def process_rewards(i, rewards_per_episode):
-    
-    rewards = np.array(rewards_per_episode)
+    num_episodes = []
+    rewards = np.array(rewards_all_episodes)
     rewards = np.array([0 if x == -1 else x for x in rewards])
     rewards = rewards.cumsum() 
 
     index = count(start = 1)
-    # num_episodes = np.array(num_episodes.append(next(index)))
-    coordinates = np.array(list(zip(index, rewards)))
-    num_episodes, rewards = zip(*coordinates)
+    num_episodes = np.array(num_episodes.append(next(index)))
 
     plt.cla()
     plt.plot(num_episodes, rewards)
 
 def plot_rewards(rewards_per_episode):
-    hell = FuncAnimation(plt.gcf(), process_rewards, interval=1000, fargs=rewards_per_episode)
+    _ = FuncAnimation(plt.gcf(), process_rewards(i, rewards_per_episode), interval=1000)
     plt.show()
 
     
