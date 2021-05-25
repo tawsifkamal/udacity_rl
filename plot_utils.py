@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from itertools import count
+import json 
 
 def plot_blackjack_values(V):
 
@@ -69,22 +70,28 @@ def plot_policy(policy):
     get_figure(False, ax)
     plt.show()
 
-def process_rewards(i, rewards_per_episode):
-    
-    rewards = np.array(rewards_per_episode)
-    rewards = np.array([0 if x == -1 else x for x in rewards])
-    rewards = rewards.cumsum() 
+def plot_win_rate(rewards_all_episodes, num_episodes):
 
-    index = count(start = 1)
-    # num_episodes = np.array(num_episodes.append(next(index)))
-    coordinates = np.array(list(zip(index, rewards)))
-    num_episodes, rewards = zip(*coordinates)
+    # using the optimal policy 
+    rewards_optimal = np.array(rewards_all_episodes)
+    rewards_optimal = np.array([0 if x == -1 else x for x in rewards_optimal])
+    rewards_optimal = rewards_optimal.cumsum()
+    win_rate_optimal = rewards_optimal / np.arange(1, num_episodes+1)
 
-    plt.cla()
-    plt.plot(num_episodes, rewards)
+    # using a completely random policy 
+    file = open('misc/rewards.json', 'r')
+    rewards_all_random = json.load(file)
+    file.close()
 
-def plot_rewards(rewards_per_episode):
-    hell = FuncAnimation(plt.gcf(), process_rewards, interval=1000, fargs=rewards_per_episode)
+    rewards_random = np.array(rewards_all_random)
+    rewards_random = np.array([0 if x == -1 else x for x in rewards_random])
+    rewards_random = rewards_random.cumsum()
+    win_rate_random = rewards_random / np.arange(1, num_episodes+1)
+
+    plt.plot(np.arange(1, num_episodes+1), win_rate_optimal)
+    plt.plot(np.arange(1, num_episodes + 1), win_rate_random)
+    plt.legend(['Optimal Policy', 'Random Policy'])
     plt.show()
+
 
     
