@@ -42,7 +42,6 @@ class Agent:
             action = self.env.action_space.sample()
         
         return action
-
         
 
     def step(self, state, action, reward, next_state, done):
