@@ -1,0 +1,42 @@
+Defining Your RL-Agent using classes
+
+1. initialize environment as an attribute + statespace, actionspace, random_seed, hyperparameters and q-table 
+
+2. do any preprocessing (discretization for your states or actionspaces)
+
+3. define a reset method 
+
+    - decay your epsilon 
+    - return the action that you are going to be taking in that initial state. 
+    
+    Necessary because your initial state will not go inside the while loop!! It needs to be outside, so its cleaner to define the reset episode in a seperate method 
+
+4. create your epsilon greedy policy 
+    
+5. Define a "take action" method 
+    paramaters: 
+        - state
+        - mode (either training or test)
+        - reward 
+        - done 
+        
+    Either take actions in test mode where you are only sampling from the Q-table, or 
+        
+        
+        
+        
+        
+        
+Discretization Process
+- break up your continuous statespace/actionspace into bins through a function that will return split points 
+
+- define another function that will place your continuous spaces into the appropriate bins
+
+
+
+
+*******Notes********
+
+your attributes can be treated as globals for the instance of your class!!
+
+if you update a self.<variable>, it is as if you are updating a normal global variable!!!!
