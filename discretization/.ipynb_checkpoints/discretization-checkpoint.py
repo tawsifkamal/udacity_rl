@@ -18,7 +18,7 @@ import sys
 import gym
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 
 # Set plotting options
@@ -51,7 +51,7 @@ for t in range(200):
         break 
 print('Final score:', score)
 env.close()
-print('hello')
+
 # %% [markdown]
 # In this notebook, you will train an agent to perform much better!  For now, we can explore the state and action spaces, as well as sample them.
 
