@@ -1,19 +1,34 @@
 import gym
+import torch 
+from collections import namedtuple
+import random
 
-env = gym.make('LunarLander-v2')
+from dqn_agent import Agent
+from environment import Environment
+
+
+# setting up our environment
+env = Environment('LunarLander-v2')
+agent = Agent(env.statespace, env.actionspace, 10)
+# Setting up our agent 
+
+
+
+# # Defining the typle 
+# Experience = namedtuple('Experience', field_names= ['state', 'action', 'reward', 'next_state'])
+# new_tuple = Experience(state, action, reward, next_state)
+
+# print(new_tuple.action)
+
 state = env.reset()
 
-# for i in range(100):
-#     reward_current_episode = 0 
-#     action = env.action_space.sample()
-#     next_state, reward, done, info = env.step(action)
-#     reward_current_episode += reward 
-#     env.render()
 
-#     if done == True:
-#         print(f'Rewards: {reward_current_episode}')
-#         break
+for i in range(200):
+    action = agent.act(state)
+    next_state, reward, done, info = env.step(action)
+    agent.step(state, action, reward, next_state, done)
+    
+    if done == True:
+        break
 
-# env.close()
-
-print(env.observation_space.shape)
+batch_experience = agent.memory.sample()
