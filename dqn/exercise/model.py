@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import gym 
+import gym
+
 
 class QNetwork(nn.Module):
     """Actor (Policy) Model."""
@@ -28,8 +29,23 @@ class QNetwork(nn.Module):
         state = self.out(state)
         return state 
 
-# Defining the Environment 
-env = gym.make('LunarLander-v2')
-statespace = env.observation_space.shape[0]
-actionspace = env.action_space.n
-model = QNetwork(statespace, actionspace)
+
+def main():
+    # Setting up our device 
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Defining the Environment 
+    env = gym.make('LunarLander-v2')
+    statespace = env.observation_space.shape[0]
+    actionspace = env.action_space.n
+
+    # Setting the random seed 
+    model = QNetwork(statespace, actionspace, 10)
+
+    # Testing our model 
+    state = torch.tensor(env.reset())
+    output = model(state)
+
+
+if __name__ == '__main__':
+    main()
