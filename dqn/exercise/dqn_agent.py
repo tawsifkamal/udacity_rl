@@ -37,6 +37,7 @@ class Agent():
         self.qnetwork_local = QNetwork(state_size, action_size, seed).to(device)
         self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
+        self.loss = torch.nn.MSELoss()
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
@@ -86,7 +87,28 @@ class Agent():
         states, actions, rewards, next_states, dones = experiences
 
         ## TODO: compute and minimize the loss
-        "*** YOUR CODE HERE ***"
+        ''' 
+        1. Get the target q-values 
+        2. Get the current q-values 
+        3. compute the loss
+        4. update the weights using adam optimizer (don't forget to set zero grad)
+
+        
+        '''
+        # the current_q_values tensor will have a shape of 64, 1 
+        current_q_values = self.qnetwork_local(states).gather(1, actions)
+        target_q_values = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(-1)
+        td_target = rewards + (gamma * target_q_values)
+        output = self.loss(td_target, current_q_values)
+        
+        # emptying out the gradients before calculating again to ensure there is no wierd addition 
+        self.optimizer.zero_grad()
+
+        # caculating the gradients of the loss function with respect to the weights 
+        output.backward()
+
+        # updating the weights using the stochastic gradient descent
+        self.optimizer.step()
 
         # ------------------- update target network ------------------- #
         self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)                     
